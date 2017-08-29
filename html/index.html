@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1"/>
+    <meta name="renderer" content="webkit" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="Expires" content="-1"/>
+
+    <meta http-equiv="Cache-Control" content="no-cache"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <title>H5_date</title>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+
+<style type="text/css">
+	table{
+		width: 100%;
+	}
+	th,td{
+		/*width: 100%;*/
+		font-size: 14px;
+		text-align: center;
+	}
+	i,em{
+		font-style: normal;
+	}
+	td{
+		color: #999;
+	}
+	td.thisMonth{
+		color: #666;
+	}
+	td i{
+		display: block;
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+
+	<div id="H5_date">
+			<div id="dateBox">
+					<table>
+						<thead>
+							<tr>
+									<th>日</th>
+									<th>一</th>
+									<th>二</th>
+									<th>三</th>
+									<th>四</th>
+									<th>五</th>
+									<th>六</th>
+							</tr>
+						</thead>
+						<tbody id="_tbody">
+						</tbody>
+					</table>
+			</div>
+	</div>
+
+<script src="../src/calendar.js"></script>
+<script src="../src/h5_date.js"></script>
+
+<script>
+// 生成日历数据 1900,3,1-2100.12.31 阳历最大值
+var str = H5_date.get_date({
+	_yyyy: 2017,
+ 	_mm: 9,
+  _dd: 29,
+ 	_el: '_tbody'
+});
+
+</script>
+
+</body>
+</html>
