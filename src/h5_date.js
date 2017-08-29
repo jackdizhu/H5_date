@@ -85,7 +85,7 @@ var H5_date = {
       j = i + 1;
       // 当天星期几
       __wk = _wk%7;
-      if(j == _obj._dd){
+      if(_obj._dd && j == _obj._dd){
         is_day = 'is_day';
       }else{
         is_day = '';
