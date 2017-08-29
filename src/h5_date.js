@@ -18,7 +18,8 @@ var H5_date = {
     });
     str += this.add_thisM({
       _yyyy: _this._yyyy,
-      _mm: _this._mm
+      _mm: _this._mm,
+      _dd: _this._dd
     });
     str += this.add_nextM({
       _yyyy: _this._yyyy,
@@ -78,14 +79,21 @@ var H5_date = {
     var str = '',j;
     var _wk = _d.nWeek;
     var __wk = _d.nWeek;
+    var is_day = '';
+
     for (var i = 0; i < _maxD; i++) {
       j = i + 1;
       // 当天星期几
       __wk = _wk%7;
+      if(j == _obj._dd){
+        is_day = 'is_day';
+      }else{
+        is_day = '';
+      }
       // if(_wk%7 == 0){
       //  str += '<tr>';
       // }
-      str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="thisMonth"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
+      str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="thisMonth '+ is_day +'"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
       if(__wk == 6){
         str += '</tr>';
       }
