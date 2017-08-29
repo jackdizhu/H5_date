@@ -20,14 +20,14 @@ var H5_date = {
       _yyyy: _this._yyyy,
       _mm: _this._mm,
       _dd: _this._dd
-    });
+    },_wk);
     str += this.add_nextM({
       _yyyy: _this._yyyy,
       _mm: _this._mm+1
     });
     // _wk 按周显示
     if(_wk){
-        this.fn_getWkData(_this,str);
+        str = this.fn_getWkData(_this,str);
     }
     if(_this._el){
         document.getElementById(_this._el).innerHTML = str;
@@ -37,9 +37,9 @@ var H5_date = {
   fn_getWkData: function (_obj,str) {
       // var _maxD = this.fn_maxD(_obj._yyyy,_obj._mm);
       // var _d = _lunar.solar2lunar(_obj._yyyy,_obj._mm,_obj._dd);
-      console.log(str);
-      var _arr = str.match(/(<tr>.*<tr\/>)/g);
-      console.log(_arr);
+      var _dd = Math.floor(_obj._dd/7);
+      var _arr = str.split(',');
+      return _arr[_dd]
   },
   fn_maxD: function (_Y,_M) {
       if (_M == '01' || _M == '03' || _M == '05' || _M == '07' || _M == '08' || _M == '10' || _M == '12') {
@@ -76,7 +76,7 @@ var H5_date = {
         if(i == 0){
           str += '<tr>';
         }
-        str += ' <td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="prevMonth"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
+        str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="prevMonth"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
       }
     }else{
       str += '<tr>';
@@ -84,7 +84,10 @@ var H5_date = {
     return str;
   },
   // 获取当前一月数据
-  add_thisM: function (_obj) {
+  add_thisM: function (_obj,_wk) {
+    // 按周显示 分割字符串
+    var _j = _wk ? ',' : '';
+
     var _maxD = this.fn_maxD(_obj._yyyy,_obj._mm);
     var _d = _lunar.solar2lunar(_obj._yyyy,_obj._mm,1);
     var str = '',j;
@@ -106,7 +109,7 @@ var H5_date = {
       // }
       str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="thisMonth '+ is_day +'"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
       if(__wk == 6){
-        str += '</tr><tr>';
+        str += '</tr>' +_j+ '<tr>';
       }
       _wk++;
     }
