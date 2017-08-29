@@ -4,7 +4,7 @@ var _lunar = {
   solar2lunar: calendar.solar2lunar
 };
 var H5_date = {
-  get_date: function (_obj) {
+  get_date: function (_obj,_wk) {
     var _this = {
       _yyyy: _obj._yyyy,
       _mm: _obj._mm,
@@ -25,10 +25,21 @@ var H5_date = {
       _yyyy: _this._yyyy,
       _mm: _this._mm+1
     });
+    // _wk 按周显示
+    if(_wk){
+        this.fn_getWkData(_this,str);
+    }
     if(_this._el){
         document.getElementById(_this._el).innerHTML = str;
     }
     return str;
+  },
+  fn_getWkData: function (_obj,str) {
+      // var _maxD = this.fn_maxD(_obj._yyyy,_obj._mm);
+      // var _d = _lunar.solar2lunar(_obj._yyyy,_obj._mm,_obj._dd);
+      console.log(str);
+      var _arr = str.match(/(<tr>.*<tr\/>)/g);
+      console.log(_arr);
   },
   fn_maxD: function (_Y,_M) {
       if (_M == '01' || _M == '03' || _M == '05' || _M == '07' || _M == '08' || _M == '10' || _M == '12') {
@@ -95,7 +106,7 @@ var H5_date = {
       // }
       str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="thisMonth '+ is_day +'"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
       if(__wk == 6){
-        str += '</tr>';
+        str += '</tr><tr>';
       }
       _wk++;
     }
@@ -123,7 +134,7 @@ var H5_date = {
         str += '<tr>';
       }
       str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="nextMonth"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
-      if(__wk == 6 || i == _maxD){
+      if(__wk == 6 || i == __n - 1){
         str += '</tr>';
       }
       _wk++;
