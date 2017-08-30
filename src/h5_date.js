@@ -1,9 +1,60 @@
+// 月份加减需要处理
+
 // 依赖插件calendar
 var _lunar = {
   // 阳历 转农历 等 详细信息
   solar2lunar: calendar.solar2lunar
 };
 var H5_date = {
+  // 前后 共三个月 数据
+  _date: [{
+    y:'',
+    m:'',
+    d:'',
+    w:'',
+    str: []
+  },{
+    y:'',
+    m:'',
+    d:'',
+    w:'',
+    str: []
+  },{
+    y:'',
+    m:'',
+    d:'',
+    w:'',
+    str: []
+  }],
+  // 月份 加减
+  get_m: function (_obj,N) {
+      // 加
+      function add_m(N) {
+          if(_obj._mm + N > 12){
+              _obj._mm = (_obj._mm + N)%12
+              _obj._yyyy++;
+          }else{
+              _obj._mm = _obj._mm + N;
+          }
+          return _obj;
+      }
+      // 减
+      function add_m2(N) {
+          if(_obj._mm + N < 1){
+              _obj._mm = _obj._mm + N + 12;
+              _obj._yyyy--;
+          }else{
+              _obj._mm = _obj._mm + N;
+          }
+          return _obj;
+      }
+      if(N>=0){
+          _obj = add_m(N);
+      }else{
+          _obj = add_m2(N);
+      }
+      return _obj;
+  },
   get_date: function (_obj,_wk) {
     var _this = {
       _yyyy: _obj._yyyy,
