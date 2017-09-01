@@ -1,33 +1,19 @@
 // 月份加减需要处理
 
-// 依赖插件calendar
 var _lunar = {
-  // 阳历 转农历 等 详细信息
-  solar2lunar: calendar.solar2lunar
+  // 获取星期几
+  _getDay: function (y,m,d) {
+     var _d = new Date(y,m - 1,d).getDay();
+     var _a = [7,1,2,3,4,5,6];
+     // console.log(_d);
+     return _a[_d];
+  }
 };
 var H5_date = {
-  // 前后 共三个月 数据
-  _date: [{
-    y:'',
-    m:'',
-    d:'',
-    w:'',
-    str: []
-  },{
-    y:'',
-    m:'',
-    d:'',
-    w:'',
-    str: []
-  },{
-    y:'',
-    m:'',
-    d:'',
-    w:'',
-    str: []
-  }],
   // 月份 加减
-  get_m: function (_obj,N) {
+  get_m: function (_obj,N,add) {
+      _obj = JSON.parse(_obj);
+      N = parseInt(N)>0 ? parseInt(N) : 0;
       // 加
       function add_m(N) {
           if(_obj._mm + N > 12){
@@ -40,54 +26,82 @@ var H5_date = {
       }
       // 减
       function add_m2(N) {
-          if(_obj._mm + N < 1){
-              _obj._mm = _obj._mm + N + 12;
+          if(_obj._mm - N < 1){
+              _obj._mm = _obj._mm - N + 12;
               _obj._yyyy--;
           }else{
-              _obj._mm = _obj._mm + N;
+              _obj._mm = _obj._mm - N;
           }
           return _obj;
       }
-      if(N>=0){
+      if(N && add){
           _obj = add_m(N);
-      }else{
+      }else if(N && !add){
           _obj = add_m2(N);
       }
+      // console.dir(_obj);
       return _obj;
   },
-  get_date: function (_obj,_wk) {
+  arr_segmentation: function (_obj) {
+      var _ymd = {};
+      var __a = [];
+      var y = _obj._ymd.y;
+      var m = _obj._ymd.m;
+      var _maxD = this.fn_maxD(y,m);
+      _ymd['y'+y] = {};
+
+      _ymd['y'+y]['m'+m] = Array(_obj._ymd.d);
+      __a = _obj._arr.slice(0,_maxD - _obj._ymd.d+1);
+      __a.push.apply(_ymd['y'+y]['m'+m],__a);
+      m++;
+
+      _ymd['y'+y]['m'+m] = [];
+      __a = _obj._arr.slice(_maxD - _obj._ymd.d,_obj._arr.length);
+      __a.push.apply(_ymd['y'+y]['m'+m],__a);
+      return _ymd;
+  },
+  toMData: function (dataArr) {
+
+      var _yArr = [],_obj;
+
+      _obj = this.arr_segmentation(dataArr);
+
+      this._cOrs = _obj;
+  },
+  get_date: function (_obj,is_wkData) {
+
+    // 清除数据
+    this._thisMothData = [];
+    this._data = [];
+    this._cOrs = {};
+
+    // 计算 财 衰 数据
+    this.toMData(_obj.data);
+
     var _this = {
       _yyyy: _obj._yyyy,
       _mm: _obj._mm,
       _dd: _obj._dd,
       _el: _obj._el
     }
-    var str = '';
-    str += this.add_prevM({
-      _yyyy: _this._yyyy,
-      _mm: _this._mm-1
-    });
-    str += this.add_thisM({
-      _yyyy: _this._yyyy,
-      _mm: _this._mm,
-      _dd: _this._dd
-    },_wk);
-    str += this.add_nextM({
-      _yyyy: _this._yyyy,
-      _mm: _this._mm+1
-    });
-    // _wk 按周显示
-    if(_wk){
-        str = this.fn_getWkData(_this,str);
-    }
+
+    var _str = JSON.stringify(_this);
+    this._data[0] = this.get_m(_str,1,false);
+    this._data[1] = this.get_m(_str,0,true);
+    this._data[2] = this.get_m(_str,1,true);
+
+    this.add_prevM(this._data[0]);
+    this.add_thisM(this._data[1]);
+    this.add_nextM(this._data[2]);
+
     if(_this._el){
         document.getElementById(_this._el).innerHTML = str;
     }
-    return str;
+    return this._thisMothData;
   },
   fn_getWkData: function (_obj,str) {
       // var _maxD = this.fn_maxD(_obj._yyyy,_obj._mm);
-      // var _d = _lunar.solar2lunar(_obj._yyyy,_obj._mm,_obj._dd);
+      // var _d = _lunar._getDay(_obj._yyyy,_obj._mm,_obj._dd);
       var _dd = Math.floor(_obj._dd/7);
       var _arr = str.split(',');
       return _arr[_dd]
@@ -113,86 +127,72 @@ var H5_date = {
           }
       }
   },
-  // 获取上一月数据
-  add_prevM: function (_obj) {
-    // 获取上一月 最大天数
-    var _maxD = this.fn_maxD(_obj._yyyy,_obj._mm);
-    // 获取当前月 1号 信息
-    var _d = _lunar.solar2lunar(_obj._yyyy,_obj._mm+1,1);
-    var __n = _maxD - _d.nWeek;
-    var str = '',j;
-    if(_d.nWeek != 7){
-      for (var i = 0; i < _d.nWeek; i++) {
-        j = i + __n + 1;
-        if(i == 0){
-          str += '<tr>';
-        }
-        str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="prevMonth"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
+  get_cOrs_str: function (y,m,d) {
+      var _cOrs_str = '&nbsp;';
+      if(this._cOrs['y'+y] && this._cOrs['y'+y]['m'+m] && this._cOrs['y'+y]['m'+m][d]){
+        _cOrs_str = this._cOrs['y'+y]['m'+m][d];
       }
-    }else{
-      str += '<tr>';
+      return _cOrs_str;
+  },
+  // 获取上一月数据
+  add_prevM: function () {
+    var _cOrs_str = '&nbsp;';
+    // 获取上一月 最大天数
+    var _maxD = this.fn_maxD(this._data[1]._yyyy,this._data[1]._mm);
+    // 获取当前月 1号 信息
+    var _d = _lunar._getDay(this._data[1]._yyyy,this._data[1]._mm,1);
+    var __n = _maxD - _d;
+    if(_d != 7){
+      var j;
+      for (var i = 0; i < _d; i++) {
+        j = i + __n + 1;
+        // 获取 财 衰 数据
+        _cOrs_str = this.get_cOrs_str(this._data[0]._yyyy,this._data[0]._mm,j);
+
+        this._thisMothData.push('<li data_y="' + this._data[0]._yyyy + '" data_m="' + this._data[0]._mm + '" data_d="' + j + '" class="prevMonth"><span>' + j + '</span><i>' + _cOrs_str + '</i></li>');
+      }
     }
-    return str;
+
+    // return str;
   },
   // 获取当前一月数据
-  add_thisM: function (_obj,_wk) {
-    // 按周显示 分割字符串
-    var _j = _wk ? ',' : '';
+  add_thisM: function () {
+    var _cOrs_str = '&nbsp;';
 
-    var _maxD = this.fn_maxD(_obj._yyyy,_obj._mm);
-    var _d = _lunar.solar2lunar(_obj._yyyy,_obj._mm,1);
-    var str = '',j;
-    var _wk = _d.nWeek;
-    var __wk = _d.nWeek;
+    var _maxD = this.fn_maxD(this._data[1]._yyyy,this._data[1]._mm);
+    var _d = this._wk;
+    var j;
     var is_day = '';
 
     for (var i = 0; i < _maxD; i++) {
       j = i + 1;
-      // 当天星期几
-      __wk = _wk%7;
-      if(_obj._dd && j == _obj._dd){
+      // 获取 财 衰 数据
+      _cOrs_str = this.get_cOrs_str(this._data[1]._yyyy,this._data[1]._mm,j);
+      if(this._data[1]._dd && j == this._data[1]._dd){
         is_day = 'is_day';
       }else{
         is_day = '';
       }
-      // if(_wk%7 == 0){
-      //  str += '<tr>';
-      // }
-      str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="thisMonth '+ is_day +'"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
-      if(__wk == 6){
-        str += '</tr>' +_j+ '<tr>';
-      }
-      _wk++;
+      this._thisMothData.push('<li data_y="' + this._data[1]._yyyy + '" data_m="' + this._data[1]._mm + '" data_d="' + i + '" class="thisMonth '+ is_day +'"><span>' + j + '</span><i>' + _cOrs_str + '</i></li>');
     }
-    return str;
+    // return str;
   },
   // 获取下一月数据
-  add_nextM: function (_obj) {
-    // 上一月 最大值
-    var _maxD = this.fn_maxD(_obj._yyyy,_obj._mm-1);
-    // 上一月 最后一天信息
-    var _d = _lunar.solar2lunar(_obj._yyyy,_obj._mm-1,_maxD);
-    var str = '',j;
-    var _wk = _d.nWeek;
-    // 如果上一月最后一天是 星期六
-    if(_wk == 6){
-      return '</tr>';
-    }
-    var __n = (14 - _wk - 1)%7;
-    var __wk = _d.nWeek;
-    for (var i = 0; i < __n; i++) {
-      j = i + 1;
-      // 当天星期几
-      __wk = _wk%7;
-      if(_wk%7 == 0){
-        str += '<tr>';
+  add_nextM: function () {
+    var _cOrs_str = '&nbsp;';
+    var j;
+    var __n = 42 - this._thisMothData.length;
+
+    if(this._thisMothData.length < 42){
+      for (var i = 0; i < __n; i++) {
+        j = i + 1;
+        // 获取 财 衰 数据
+        _cOrs_str = this.get_cOrs_str(this._data[2]._yyyy,this._data[2]._mm,j);
+        // 当天星期几
+        // str += '<li data_y="' + this._data[2]._yyyy + '" data_m="' + this._data[2]._mm + '" data_d="' + i + '" class="nextMonth"><span>' + j + '</span><i>' + _cOrs_str + '</i></li>';
+        this._thisMothData.push('<li data_y="' + this._data[2]._yyyy + '" data_m="' + this._data[2]._mm + '" data_d="' + i + '" class="nextMonth"><span>' + j + '</span><i>' + _cOrs_str + '</i></li>');
       }
-      str += '<td data_y="' + _obj._yyyy + '" data_m="' + _obj._mm + '" data_d="' + i + '" class="nextMonth"><i>' + j + '</i><em>' + '&nbsp;' + '</em></td>';
-      if(__wk == 6 || i == __n - 1){
-        str += '</tr>';
-      }
-      _wk++;
     }
-    return str;
+    // return str;
   }
 };

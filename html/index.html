@@ -66,19 +66,48 @@
 			</div>
 	</div>
 
-<script src="../src/calendar.js"></script>
+<!-- <script src="../src/calendar.js"></script> -->
 <script src="../src/h5_date.js"></script>
 
 <script>
-// 生成日历数据 1900,3,1-2100.12.31 阳历最大值
-var str = H5_date.get_date({
-	_yyyy: 2017,
- 	_mm: 10,
-  _dd: 5,
- 	_el: '_tbody'
-},true);
+        var _swiperStrArr = [];
 
-</script>
+        // 生成日历数据 1900,3,1-2100.12.31 阳历最大值
+        var dataArr =
+            {
+              _ymd: {
+                y: 2017,
+                m: 10,
+                d: 2
+              },
+              _arr: ['财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰']
+            }
+          ;
+
+        var data_obj = {
+          _yyyy: 2017,
+          _mm: 10,
+          _dd: 5,
+          data:dataArr
+        };
+        var _ymd = [];
+        function _swiperStrArr_init(_obj) {
+            var _str = JSON.stringify(_obj);
+            _ymd[0] = H5_date.get_m(_str,1,false);
+            _ymd[1] = JSON.parse(_str);
+            _ymd[2] = H5_date.get_m(_str,1,true);
+
+            _swiperStrArr[0] = '<div class="swiper-slide"><p class="calendarBox_tit"><span>'+_ymd[0]._yyyy+'年'+_ymd[0]._mm+'月</span></p><div class="calendarBox_th"><ul class="clearfix"><li><i class="red">日</i></li><li><i>一</i></li><li><i>二</i></li><li><i>三</i></li><li><i>四</i></li><li><i>五</i></li><li><i class="red">六</i></li></ul></div><div class="calendarBox_td"><ul class="clearfix">'+H5_date.get_date(_ymd[0],false).join('')+'</ul></div></div>';
+            _swiperStrArr[1] = '<div class="swiper-slide"><p class="calendarBox_tit"><span>'+_ymd[1]._yyyy+'年'+_ymd[1]._mm+'月</span></p><div class="calendarBox_th"><ul class="clearfix"><li><i class="red">日</i></li><li><i>一</i></li><li><i>二</i></li><li><i>三</i></li><li><i>四</i></li><li><i>五</i></li><li><i class="red">六</i></li></ul></div><div class="calendarBox_td"><ul class="clearfix">'+H5_date.get_date(_ymd[1],false).join('')+'</ul></div></div>';
+            _swiperStrArr[2] = '<div class="swiper-slide"><p class="calendarBox_tit"><span>'+_ymd[2]._yyyy+'年'+_ymd[2]._mm+'月</span></p><div class="calendarBox_th"><ul class="clearfix"><li><i class="red">日</i></li><li><i>一</i></li><li><i>二</i></li><li><i>三</i></li><li><i>四</i></li><li><i>五</i></li><li><i class="red">六</i></li></ul></div><div class="calendarBox_td"><ul class="clearfix">'+H5_date.get_date(_ymd[2],false).join('')+'</ul></div></div>';
+            // console.dir(_ymd);
+        }
+        _swiperStrArr_init(data_obj);
+        // console.log(_ymd);
+        // document.getElementById('swiper-wrapper1').innerHTML = _swiperStrArr.join('');
+        console.log(_swiperStrArr);
+
+    </script>
 
 </body>
 </html>
