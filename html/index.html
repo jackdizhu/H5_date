@@ -15,8 +15,46 @@
     <meta http-equiv="Pragma" content="no-cache"/>
     <title>H5_date</title>
     <link rel="shortcut icon" href="/favicon.ico"/>
-
+<script>
+    !(function(doc, win) {
+        var docEle = doc.documentElement,
+                evt = "onorientationchange" in window ? "orientationchange" : "resize",
+                fn = function() {
+                    var width = docEle.clientWidth;
+                    width && (docEle.style.fontSize = (width / 7.5) + "px");
+                },
+                fn1 = function() {
+                    setTimeout(function(){
+                        var width = docEle.clientWidth;
+                        width && (docEle.style.fontSize = (width / 7.5) + "px");
+                    }, 300);
+                };
+        win.addEventListener(evt, fn1, false);
+        doc.addEventListener("DOMContentLoaded", fn, false);
+    }(document, window));
+</script>
+<link rel="stylesheet" type="text/css" href="../dist/css/swiper.min.css"/>
 <style type="text/css">
+*{
+    padding:0;
+    margin:0;
+
+    box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      -webkit-box-sizing: border-box;
+}
+li{
+    list-style: none;
+}
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+
 	table{
 		width: 100%;
 	}
@@ -42,72 +80,236 @@
 		display: block;
 		text-align: center;
 	}
+
+    .calendarBox {
+      background-color: #fff;
+      /*padding: 0 .16rem;*/
+      transition: all .2s;
+      -moz-transition: all .2s;
+      -webkit-transition: all .2s;
+      -o-transition: all .2s;
+      height: 8.5rem;
+    }
+    .calendarBox .swiper-slide {
+      padding: 0 .16rem;
+    }
+    .calendarBox .swiper-container {
+      height: 100%;
+    }
+    .calendarBox i.red {
+      color: #b11f1f;
+    }
+    .calendarBox i.green {
+      color: #1daf35;
+    }
+    .calendarBox .calendarBox_tit {
+      height: .9rem;
+      padding-top: .4rem;
+      padding-left: .44rem;
+      padding-right: .44rem;
+      font-size: .28rem;
+      color: #333333;
+      border-bottom: 1px solid #dddddd;
+    }
+    .calendarBox .calendarBox_th li {
+      float: left;
+      width: 14.28%;
+      font-size: .26rem;
+      color: #333;
+      height: .86rem;
+      line-height: .86rem;
+      text-align: center;
+    }
+    .calendarBox .calendarBox_td {
+      border-bottom: 1px solid #dddddd;
+      padding-bottom: .2rem;
+    }
+    .calendarBox .calendarBox_td li {
+      float: left;
+      width: 14.28%;
+      text-align: center;
+      padding: .1rem 0;
+      border-radius: .1rem;
+    }
+    .calendarBox .calendarBox_td li span {
+      display: block;
+      font-size: .5rem;
+      color: #333;
+    }
+    .calendarBox .calendarBox_td li i {
+      display: block;
+      font-size: .22rem;
+    }
+    .calendarBox .calendarBox_td li.is_day,
+    .calendarBox .calendarBox_td li.on {
+      background-color: #b11f1f;
+    }
+    .calendarBox .calendarBox_td li.is_day span,
+    .calendarBox .calendarBox_td li.on span,
+    .calendarBox .calendarBox_td li.is_day i,
+    .calendarBox .calendarBox_td li.on i,
+    .calendarBox .calendarBox_td li.is_day i.red,
+    .calendarBox .calendarBox_td li.on i.red,
+    .calendarBox .calendarBox_td li.is_day i.green,
+    .calendarBox .calendarBox_td li.on i.green {
+      color: #fff;
+    }
+    .calendarBox .calendarBox_td li.prevMonth,
+    .calendarBox .calendarBox_td li.nextMonth {
+      opacity: .35;
+      filter: alpha(opacity=35);
+    }
+    .calendarBox.fixedItem {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 2.2rem;
+      z-index: 999;
+    }
 </style>
 </head>
-<body>
+<body style="height: 2000px;">
 
-	<div id="H5_date">
-			<div id="dateBox">
-					<table>
-						<thead>
-							<tr>
-									<th>日</th>
-									<th>一</th>
-									<th>二</th>
-									<th>三</th>
-									<th>四</th>
-									<th>五</th>
-									<th>六</th>
-							</tr>
-						</thead>
-						<tbody id="_tbody">
-						</tbody>
-					</table>
-			</div>
-	</div>
+	<!-- 日历显示 -->
+    <div class="calendarBox">
+        <div id="swiper-container1" class="swiper-container">
+            <div id="swiper-wrapper1" class="swiper-wrapper">
+                <div class="swiper-slide">
+                    <p class="calendarBox_tit"><span>2017年8月</span></p>
+                    <div class="calendarBox_th">
+                        <ul class="clearfix">
+                            <li><i class="red">日</i></li>
+                            <li><i>一</i></li>
+                            <li><i>二</i></li>
+                            <li><i>三</i></li>
+                            <li><i>四</i></li>
+                            <li><i>五</i></li>
+                            <li><i class="red">六</i></li>
+                        </ul>
+                    </div>
+                    <div class="calendarBox_td">
+                        <ul class="clearfix">
+                            <li><span>30</span><i class="red">财</i></li>
+                            <li class="on"><span>30</span><i class="red">财</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <p class="calendarBox_tit"><span>2017年9月</span></p>
+                    <div class="calendarBox_th">
+                        <ul class="clearfix">
+                            <li><i class="red">日</i></li>
+                            <li><i>一</i></li>
+                            <li><i>二</i></li>
+                            <li><i>三</i></li>
+                            <li><i>四</i></li>
+                            <li><i>五</i></li>
+                            <li><i class="red">六</i></li>
+                        </ul>
+                    </div>
+                    <div class="calendarBox_td">
+                        <ul class="clearfix">
+                            <li><span>30</span><i class="red">财</i></li>
+                            <li class="on"><span>30</span><i class="red">财</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="swiper-slide">
+                    <p class="calendarBox_tit"><span>2017年10月</span></p>
+                    <div class="calendarBox_th">
+                        <ul class="clearfix">
+                            <li><i class="red">日</i></li>
+                            <li><i>一</i></li>
+                            <li><i>二</i></li>
+                            <li><i>三</i></li>
+                            <li><i>四</i></li>
+                            <li><i>五</i></li>
+                            <li><i class="red">六</i></li>
+                        </ul>
+                    </div>
+                    <div class="calendarBox_td">
+                        <ul class="clearfix">
+                            <li><span>30</span><i class="red">财</i></li>
+                            <li class="on"><span>30</span><i class="red">财</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                            <li><span>30</span><i class="green">衰</i></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <!-- <script src="../src/calendar.js"></script> -->
-<script src="../src/h5_date.js"></script>
+<script type="text/javascript" src="../dist/js/zepto.min.js"></script>
+<script type="text/javascript" src="../dist/js/swiper.jquery.min.js"></script>
+<script src="../src/js/h5_date.js"></script>
 
 <script>
-        var _swiperStrArr = [];
+    var _swiperStrArr = [];
 
-        // 生成日历数据 1900,3,1-2100.12.31 阳历最大值
-        var dataArr =
-            {
-              _ymd: {
-                y: 2017,
-                m: 10,
-                d: 2
-              },
-              _arr: ['财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰']
-            }
-          ;
-
-        var data_obj = {
-          _yyyy: 2017,
-          _mm: 10,
-          _dd: 5,
-          data:dataArr
-        };
-        var _ymd = [];
-        function _swiperStrArr_init(_obj) {
-            var _str = JSON.stringify(_obj);
-            _ymd[0] = H5_date.get_m(_str,1,false);
-            _ymd[1] = JSON.parse(_str);
-            _ymd[2] = H5_date.get_m(_str,1,true);
-
-            _swiperStrArr[0] = '<div class="swiper-slide"><p class="calendarBox_tit"><span>'+_ymd[0]._yyyy+'年'+_ymd[0]._mm+'月</span></p><div class="calendarBox_th"><ul class="clearfix"><li><i class="red">日</i></li><li><i>一</i></li><li><i>二</i></li><li><i>三</i></li><li><i>四</i></li><li><i>五</i></li><li><i class="red">六</i></li></ul></div><div class="calendarBox_td"><ul class="clearfix">'+H5_date.get_date(_ymd[0],false).join('')+'</ul></div></div>';
-            _swiperStrArr[1] = '<div class="swiper-slide"><p class="calendarBox_tit"><span>'+_ymd[1]._yyyy+'年'+_ymd[1]._mm+'月</span></p><div class="calendarBox_th"><ul class="clearfix"><li><i class="red">日</i></li><li><i>一</i></li><li><i>二</i></li><li><i>三</i></li><li><i>四</i></li><li><i>五</i></li><li><i class="red">六</i></li></ul></div><div class="calendarBox_td"><ul class="clearfix">'+H5_date.get_date(_ymd[1],false).join('')+'</ul></div></div>';
-            _swiperStrArr[2] = '<div class="swiper-slide"><p class="calendarBox_tit"><span>'+_ymd[2]._yyyy+'年'+_ymd[2]._mm+'月</span></p><div class="calendarBox_th"><ul class="clearfix"><li><i class="red">日</i></li><li><i>一</i></li><li><i>二</i></li><li><i>三</i></li><li><i>四</i></li><li><i>五</i></li><li><i class="red">六</i></li></ul></div><div class="calendarBox_td"><ul class="clearfix">'+H5_date.get_date(_ymd[2],false).join('')+'</ul></div></div>';
-            // console.dir(_ymd);
+    // 生成日历数据 1900,3,1-2100.12.31 阳历最大值
+    var dataArr =
+        {
+          _ymd: {
+            y: 2017,
+            m: 9,
+            d: 2
+          },
+          _arr: ['财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰','财','衰','衰']
         }
-        _swiperStrArr_init(data_obj);
-        // console.log(_ymd);
-        // document.getElementById('swiper-wrapper1').innerHTML = _swiperStrArr.join('');
-        console.log(_swiperStrArr);
+      ;
 
-    </script>
+    var data_obj = {
+      _yyyy: 2017,
+      _mm: 9,
+      _dd: 5,
+      data:dataArr
+    };
+
+    var json_str = JSON.stringify(data_obj);
+    var _H5_date = H5_date.init(json_str,'swiper-container1','swiper-wrapper1',{
+            seleceMothData: function () { // 显示月数据 回调
+                $('.calendarBox').removeClass('fixedItem');
+                $('.page_results').removeClass('fixedBox');
+                console.log('seleceMothData');
+            },
+            seleceDayData: function () { // 显示周数据 回调
+                $('.calendarBox').addClass('fixedItem');
+                $('.page_results').addClass('fixedBox');
+                console.log('seleceDayData');
+            }
+        });
+    var is_wkData = true;
+    $(function () {
+            var _h = $('.calendarBox').height();
+            console.log(_h);
+            $(window).scroll(function () {
+                var scrollTop = $(this).scrollTop();
+                // console.log(scrollTop);
+                if(scrollTop>_h*.9){
+                    if(!is_wkData){
+                        _H5_date.seleceDayData();// 显示月数据
+                        is_wkData = true;
+                    }
+                }else{
+                    if(is_wkData){
+                        _H5_date.seleceMothData();// 显示周数据
+                        is_wkData = false;
+                    }
+                }
+            });
+    });
+
+</script>
 
 </body>
 </html>
