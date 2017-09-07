@@ -7,6 +7,12 @@ calendar js 1900-2100 农历数据
 https://github.com/jackdizhu/H5_date
 https://jackdizhu.github.io/H5_date
 
+    [comment]: <> (This is a comment, it will not be included)
+    [comment]: <> (in  the output file unless you use it in)
+    [comment]: <> (a reference style link.)
+    [//]: <> (This is also a comment.)
+    [//]: # (This may be the most platform independent comment)
+
     // 生成日历数据 1900,3,1-2100.12.31 阳历最大值
     /**
         var dataArr =
