@@ -8,7 +8,7 @@ https://github.com/jackdizhu/H5_date
 https://jackdizhu.github.io/H5_date
 
     // 生成日历数据 1900,3,1-2100.12.31 阳历最大值
-    [//]:
+    /**
         var dataArr =
             {
               _ymd: {
@@ -26,6 +26,7 @@ https://jackdizhu.github.io/H5_date
           _dd: 5,
           data:dataArr
         };
+    */
 
     var json_str = JSON.stringify(data_obj);
     var _H5_date = H5_date.init(json_str,'swiper-container1','swiper-wrapper1',{
